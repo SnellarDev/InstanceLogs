@@ -64,8 +64,7 @@ namespace InstanceLogs
         public static void LogRoomInfo()
         {
             File.AppendAllText(LogMain.PlayerLogs, $"----------------------------------\nJoined World: {WorldInfo.name}" +
-                $"\nPlayers: {PlayerMath}"
-                + "/" + $"{WrldInstance.world.capacity * 2}\nInstance: {WrldInstance.id}\n----------------------------------\n\n");
+                $"\nPlayers: {PlayerMath}\nInstance: {WrldInstance.id}\n----------------------------------\n\n");
             File.AppendAllText(LogMain.AvatarLogs, $"----------------------------------\nJoined World: {WorldInfo.name}" +
                 $"\nPlayers: {PlayerMath}\nInstance: {WrldInstance.id}\n----------------------------------\n\n");
         }
@@ -114,7 +113,7 @@ namespace InstanceLogs
         {
             get
             {
-                return PhotonRoom.field_Private_Dictionary_2_Int32_Player_0.Count + "/" + WrldInstance.world.capacity;
+                return PhotonRoom.field_Private_Dictionary_2_Int32_Player_0.Count + "/" + WrldInstance.world.capacity * 2;
             }
 
         
