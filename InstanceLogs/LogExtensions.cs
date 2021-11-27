@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using Il2CppSystem.Collections.Generic;
 using VRC.Core;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 namespace InstanceLogs
 {
     public class LogExtensions
     {
-        public static void LogPlayer(Photon.Realtime.Player player)
+        public static void LogPlayer(Photon.Realtime.Player player, bool avatars)
         {
             try
             {
@@ -37,7 +38,9 @@ namespace InstanceLogs
                             "Tags: ",
                             $"{LogToString(playerdict["tags"]).TrimStart('[').TrimEnd(']')}", $"\nLogged at: {DateTime.Now}\n----------------------------------\n\n",
                             }));
-                File.AppendAllText(LogMain.AvatarLogs, string.Concat(new object[]
+                if(avatars)
+                {
+                    File.AppendAllText(LogMain.AvatarLogs, string.Concat(new object[]
                                 {
                             $"----------------------------------\n",
                             "User: ",
@@ -57,10 +60,47 @@ namespace InstanceLogs
                             "Last Upload Time: ",
                             $"{LogToString(avatardict["updated_at"]).TrimStart('"').TrimEnd('"')}", $"\nLogged at: {DateTime.Now}\n----------------------------------\n\n",
                                 }));
+                }
+                
             }
             catch { }
         }
+        public static void LogAvatar(EventData __0)
+        {
+            try
+            {
+                Il2CppSystem.Collections.Hashtable hashtable = __0.Parameters[251].Cast<Il2CppSystem.Collections.Hashtable>();
+                Dictionary<string, Il2CppSystem.Object> playerdict = hashtable["user"].Cast<Dictionary<string, Il2CppSystem.Object>>();
+                Dictionary<string, Il2CppSystem.Object> avatardict = hashtable["avatarDict"].Cast<Dictionary<string, Il2CppSystem.Object>>();
+                if(lastid != LogToString(avatardict["id"]) || lastplayer != LogToString(playerdict["displayName"]))
+                {
+                    File.AppendAllText(LogMain.AvatarLogs, string.Concat(new object[]
+                                {
+                            $"----------------------------------\n",
+                            "User: ",
+                            LogToString(playerdict["displayName"]).TrimStart('"').TrimEnd('"') + "\n",
+                            "Avatar Name: ",
+                            LogToString(avatardict["name"]).TrimStart('"').TrimEnd('"') + "\n",
+                            "AvatarID: ",
+                            LogToString(avatardict["id"]).TrimStart('"').TrimEnd('"') + "\n",
+                            "AssetURL: ",
+                            LogToString(avatardict["assetUrl"]).TrimStart('"').TrimEnd('"') + "\n",
+                            "ImageURL: ",
+                            LogToString(avatardict["imageUrl"]).TrimStart('"').TrimEnd('"') +"\n",
+                            "ReleaseStatus: ",
+                            LogToString(avatardict["releaseStatus"]).TrimStart('"').TrimEnd('"') + "\n",
+                            "Version: ",
+                            LogToString(avatardict["version"]).TrimStart('"').TrimEnd('"') + "\n",
+                            "Last Upload Time: ",
+                            $"{LogToString(avatardict["updated_at"]).TrimStart('"').TrimEnd('"')}", $"\nLogged at: {DateTime.Now}\n----------------------------------\n\n",
+                                }));
+                }
 
+                lastplayer = LogToString(playerdict["displayName"]);
+                lastid = LogToString(avatardict["id"]);
+            }
+            catch { }
+        }
         public static void LogRoomInfo()
         {
             File.AppendAllText(LogMain.PlayerLogs, $"----------------------------------\nJoined World: {WorldInfo.name}" +
@@ -134,6 +174,8 @@ namespace InstanceLogs
             }
         }
 
+        public static string lastid;
+        public static string lastplayer;
         public static string LogToString(Il2CppSystem.Object obj) => JsonConvert.SerializeObject(Serialization.FromIL2CPPToManaged<object>(obj), Formatting.None);
     }
 }
