@@ -353,7 +353,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlayerExtensions.cs" />
     <Compile Include="LogExtensions.cs" />
     <Compile Include="LogMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
