@@ -119,7 +119,7 @@ namespace InstanceLogs
                             "World Name: ",
                             WorldInfo.name + "\n",
                             "InstanceID: ",
-                            WorldInfo.id + "\n",
+                            WrldInstance.id + "\n",
                             "AssetURL: ",
                             WorldInfo.assetUrl + "\n",
                             "Author: ",
